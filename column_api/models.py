@@ -6,3 +6,6 @@ class Lanes(models.Model):
     index       = models.SmallIntegerField()
     created_at  = models.DateTimeField(auto_now_add=True)
     edited_at   = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name

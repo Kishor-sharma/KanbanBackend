@@ -5,4 +5,4 @@ from .models import Lanes
 class LanesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lanes
-        fields = ['name', 'index']
+        fields = ['id', 'name', 'index']
