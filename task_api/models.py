@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models.fields import SmallIntegerField
-from rest_framework import status
 
 # Create your models here.
 class Task(models.Model):

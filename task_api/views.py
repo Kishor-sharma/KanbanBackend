@@ -10,7 +10,7 @@ from column_api.models import Lanes
 
 # Create your views here.
 class TaskAPIView(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_specificTask(self, boardID=None, columnID=None):
@@ -75,7 +75,6 @@ class TaskDetailView(APIView):
             return Response(serializer.data)
 
     def delete(self, request, pk):
-        print('request: ', request.data)
         task = self.get_object(pk)
         if isinstance(task, Response):
             return task

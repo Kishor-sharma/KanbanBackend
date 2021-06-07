@@ -8,7 +8,7 @@ from .serializer import LanesSerializer
 
 # Create your views here.
 class LaneAPIView(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
