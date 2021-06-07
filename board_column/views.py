@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions, authentication, status
-from django.contrib.auth.models import User
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .models import BoardColumn
 from board_api.models import Board
 from column_api.models import Lanes
@@ -10,6 +10,9 @@ from .serializer import BoardColumnSerializer
 
 # Create your views here.
 class BoardColumnAPIView(APIView):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         alldata = BoardColumn.objects.all()
         serializer = BoardColumnSerializer(alldata, many=True)
@@ -30,6 +33,9 @@ class BoardColumnAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
 
 class BoardColumnDetailView(APIView):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, pk):
         try:
             return BoardColumn.objects.get(pk=pk)
@@ -44,5 +50,7 @@ class BoardColumnDetailView(APIView):
     
     def get(self, request, tableID):
         boardcolumn = self.get_tableColumn(tableID)
+        if isinstance(boardcolumn, Response):
+            return boardcolumn
         serializer = BoardColumnSerializer(boardcolumn, many=True)
         return Response(serializer.data)
