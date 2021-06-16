@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from board_column.views import BoardColumnAPIView, BoardColumnDetailView
+from board_column_api.views import BoardColumnAPIView, BoardColumnDetailView
 
 class TestBoardColumnUrl(TestCase):
     def test_list_url(self):

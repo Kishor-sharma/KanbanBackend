@@ -17,22 +17,22 @@ class TestTaskView(TestCase):
         self.utlwithbaordcolumn = reverse('taskwithboardcolumn', args=[1,1])
         self.detailtaskurl = reverse('detailtask', args=[1])
         self.wrongdetailtaskurl = reverse('detailtask', args=[10])
+        board = Board.objects.create(name="TestBoard", user=self.user)
+        lane1 = Lanes.objects.create(name="TODO", index=1)
+        lane2 = Lanes.objects.create(name="INPROGRESS", index=2)
         self.data = {
             "title": "do task",
             "description": "description",
             "status": "False",
-            "boardID": 1,
-            "columnID": 1
+            "board_id": 1,
+            "column_id": 1
         }
         self.task = Task.objects.create(title= "do task",
             description= "description",
             status= False,
-            boardID= 1,
-            columnID= 1
+            board= board,
+            column= lane1
         )
-        Board.objects.create(name="TestBoard", userID=self.user.id)
-        Lanes.objects.create(name="TODO", index=1)
-        Lanes.objects.create(name="INPROGRESS", index=2)
 
     def test_authorization_fail(self):
         client = Client()
@@ -60,7 +60,7 @@ class TestTaskView(TestCase):
         del new_data['title']
         response = self.validClient.post(self.url, new_data, content_type='application/json')
         self.assertEquals(response.status_code, 400)
-        new_data["boardID"] = 13
+        new_data["board_id"] = 13
         response = self.validClient.post(self.url, new_data, content_type='application/json')
         self.assertEquals(response.status_code, 405)
 
@@ -77,7 +77,7 @@ class TestTaskView(TestCase):
         self.assertEquals(response.status_code, 200)
         response = self.validClient.put(self.wrongdetailtaskurl, updated_data, content_type='application/json')
         self.assertEquals(response.status_code, 404)
-        updated_data['columnID'] = 7
+        updated_data['column_id'] = 7
         response = self.validClient.put(self.wrongdetailtaskurl, updated_data, content_type='application/json')
         self.assertEquals(response.status_code, 405)
 

@@ -3,10 +3,10 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.urls.base import resolve
-from board_column.views import BoardColumnAPIView, BoardColumnDetailView
+from board_column_api.views import BoardColumnAPIView, BoardColumnDetailView
 from board_api.models import Board
 from column_api.models import Lanes
-from board_column.models import BoardColumn
+from board_column_api.models import BoardColumn
 
 # Create your tests here.
 class TestBoardColumnView(TestCase):
@@ -17,15 +17,15 @@ class TestBoardColumnView(TestCase):
         self.url = reverse('boardcolumnlist')
         self.detailUrl = reverse('detailboardcolumn', args=[1])
         self.wrongdetailUrl = reverse('detailboardcolumn', args=[6])
-        Board.objects.create(name='Board', userID=self.user.id)
+        Board.objects.create(name='Board', user=self.user)
         Lanes.objects.create(name='TODO', index=2)
         self.data = {
-            "boardID": 1,
-            "columnID": 1,
+            "board_id": 1,
+            "column_id": 1,
             "capacity": 10,
             "limit": 5
         }
-        BoardColumn.objects.create(boardID = 1, columnID = 1, capacity = 10, limit = 5)
+        BoardColumn.objects.create(board_id = 1, column_id = 1, capacity = 10, limit = 5)
 
     def test_authorization_fail(self):
         response = Client().get(self.url)
@@ -40,17 +40,17 @@ class TestBoardColumnView(TestCase):
         self.assertEquals(response.status_code, 201)
 
         alterd_data = self.data
-        alterd_data['columnID'] = 20
+        alterd_data['column_id'] = 20
         response = self.validClient.post(self.url, alterd_data, content_type='application/json')
         self.assertEquals(response.status_code, 406)
 
-        alterd_data['columnID'] = 1
-        alterd_data['boardID'] = 13
+        alterd_data['column_id'] = 1
+        alterd_data['board_id'] = 13
         response = self.validClient.post(self.url, alterd_data, content_type='application/json')
         self.assertEquals(response.status_code, 406)
 
-        del alterd_data['columnID']
-        del alterd_data['boardID']
+        del alterd_data['column_id']
+        del alterd_data['board_id']
         alterd_data['random'] = 2
         response = self.validClient.post(self.url, alterd_data, content_type='application/json')
         self.assertEquals(response.status_code, 403)

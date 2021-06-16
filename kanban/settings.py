@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'column_api',
     'board_api',
-    'board_column',
+    'board_column_api',
     'task_api'
 ]
 
