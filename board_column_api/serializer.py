@@ -6,4 +6,4 @@ from .models import BoardColumn
 class BoardColumnSerializer(serializers.ModelSerializer):
     class Meta:
         model = BoardColumn
-        fields = ['id', 'boardID', 'columnID', 'capacity', 'limit']
+        fields = ['id', 'capacity', 'limit', 'board_id', 'column_id']
